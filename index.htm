@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Visual - SIG</title>
+    <style>
+        /* --- ESTILOS GERAIS --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            overflow: hidden;
+        }
+
+        /* --- ESTRUTURA PRINCIPAL --- */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* --- CABEÇALHO --- */
+        .header {
+            background-color: #ffffff;
+            padding: 0 25px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        .header-logo {
+            position: absolute;
+            left: 25px;
+            height: 45px;
+        }
+        
+        .header-title {
+            margin: 0;
+            font-size: 28px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* --- CONTAINER DOS DASHBOARDS (A GRADE) --- */
+        .grid-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding: 15px; /* Aumentei um pouco o espaçamento geral */
+            gap: 15px; /* Aumentei o espaço entre os itens */
+        }
+        
+        .row {
+            display: flex;
+            flex-grow: 1;
+            gap: 15px; /* Aumentei o espaço entre os itens */
+        }
+
+        /* --- ESTILO DE CADA QUADRANTE/DASHBOARD --- */
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            background-color: #ffffff;
+            border-radius: 8px; /* Bordas um pouco mais arredondadas */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06); /* Sombra um pouco mais suave */
+            overflow: hidden; 
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            min-width: 0;
+        }
+
+        .dashboard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .dashboard.disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        .dashboard.disabled:hover {
+            transform: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+        }
+
+        .dashboard h2 {
+            margin: 0;
+            padding: 14px 18px; /* Mais respiro no título */
+            font-size: 17px; /* Tamanho mais refinado */
+            color: #1f1f1f;
+            background-color: #fafafa;
+            border-bottom: 1px solid #eee; /* Linha divisória mais sutil */
+            text-align: center;
+            font-weight: 600; /* Título com mais destaque */
+            flex-shrink: 0;
+        }
+
+        .iframe-container {
+            flex-grow: 1;
+            pointer-events: none;
+            /* Cor de fundo para o caso do iframe demorar a carregar */
+            background-color: #fcfcfc;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ESTILOS "EM DESENVOLVIMENTO" - Sem alterações */
+        .dev-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            color: #888;
+            padding: 20px;
+        }
+        .dev-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+        }
+        .dev-text {
+            font-size: 17px;
+            font-weight: 500;
+        }
+
+        /* ESTILOS DO MODAL - Sem alterações */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            position: relative; width: 95%; height: 95%; background-color: #fff;
+            border-radius: 8px; padding: 20px; box-sizing: border-box;
+        }
+        .modal-close {
+            position: absolute; top: -15px; right: -15px; width: 40px; height: 40px; background: #fff;
+            color: #333; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: bold; cursor: pointer; border: 1px solid #ddd;
+        }
+        #modal-iframe { width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="header">
+            <img src="http://i.imgur.com/Fln53Oi.png" alt="Logo" class="header-logo">
+            <h1 class="header-title">Gestão Visual - SIG</h1>
+        </div>
+    
+        <div class="grid-container">
+            <div class="row">
+                <div class="dashboard" data-src="https://app.powerbi.com/view?r=eyJrIjoiNDU2MzQyNzItODIxMC00ZjdjLWE4MjAtOWYwNzU3MjEyYjEwIiwidCI6ImFmNzMwNzVlLWU1ODYtNGQwOS1iOGIzLWQ0NGI3NTgwODk1MiJ9&navContentPaneEnabled=false">
+                    <h2>Programa SOL</h2>
+                    <div class="iframe-container">
+                        <iframe title="Programa SOL" src="https://app.powerbi.com/view?r=eyJrIjoiNDU2MzQyNzItODIxMC00ZjdjLWE4MjAtOWYwNzU3MjEyYjEwIiwidCI6ImFmNzMwNzVlLWU1ODYtNGQwOS1iOGIzLWQ0NGI3NTgwODk1MiJ9&navContentPaneEnabled=false"></iframe>
+                    </div>
+                </div>
+                <div class="dashboard" data-src="https://app.powerbi.com/view?r=eyJrIjoiZTg2MjAwM2ItODg4My00M2M0LTg2NDEtMDU0NmNjNDQzNGRlIiwidCI6ImFmNzMwNzVlLWU1ODYtNGQwOS1iOGIzLWQ0NGI3NTgwODk1MiJ9&navContentPaneEnabled=false">
+                    <h2>Gestão de Indicadores</h2>
+                    <div class="iframe-container">
+                        <iframe title="Gestão de Indicadores" src="https://app.powerbi.com/view?r=eyJrIjoiZTg2MjAwM2ItODg4My00M2M0LTg2NDEtMDU0NmNjNDQzNGRlIiwidCI6ImFmNzMwNzVlLWU1ODYtNGQwOS1iOGIzLWQ0NGI3NTgwODk1MiJ9"></iframe>
+                    </div>
+                </div>
+                <div class="dashboard disabled">
+                    <h2>Checklist de Rotina</h2>
+                    <div class="dev-container">
+                        <svg class="dev-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.13,5.12L18.88,8.87M3,17.25V21H6.75L17.81,9.94L14.06,6.19L3,17.25Z" /></svg>
+                        <p class="dev-text">Em Desenvolvimento</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                 <div class="dashboard" data-src="https://app.powerbi.com/view?r=eyJrIjoiZTA5OTVjYTEtMGU3Yy00N2RmLTlhNjEtZTZlYjhlYjE4MGZjIiwidCI6ImFmNzMwNzVlLWU1ODYtNGQwOS1iOGIzLWQ0NGI3NTgwODk1MiJ9&navContentPaneEnabled=false">
+                    <h2>Anomalias</h2>
+                    <div class="iframe-container">
+                        <iframe title="Anomalias" src="https://app.powerbi.com/view?r=eyJrIjoiZTA5OTVjYTEtMGU3Yy00N2RmLTlhNjEtZTZlYjhlYjE4MGZjIiwidCI6ImFmNzMwNzVlLWU1ODYtNGQwOS1iOGIzLWQ0NGI3NTgwODk1MiJ9&navContentPaneEnabled=false"></iframe>
+                    </div>
+                </div>
+                 <div class="dashboard disabled">
+                    <h2>Gestão Documental</h2>
+                    <div class="dev-container">
+                        <svg class="dev-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.13,5.12L18.88,8.87M3,17.25V21H6.75L17.81,9.94L14.06,6.19L3,17.25Z" /></svg>
+                        <p class="dev-text">Em Desenvolvimento</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <iframe id="modal-iframe" src="" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        const dashboards = document.querySelectorAll('.dashboard');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalIframe = document.getElementById('modal-iframe');
+        const closeModalBtn = document.getElementById('modal-close');
+
+        dashboards.forEach(dashboard => {
+            if (!dashboard.classList.contains('disabled')) {
+                dashboard.addEventListener('click', () => {
+                    const iframeSrc = dashboard.getAttribute('data-src');
+                    if (iframeSrc) {
+                        modalIframe.src = iframeSrc;
+                        modalOverlay.style.display = 'flex';
+                    }
+                });
+            }
+        });
+
+        function closeModal() {
+            modalOverlay.style.display = 'none';
+            modalIframe.src = '';
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (event) => {
+            if (event.target === modalOverlay) { closeModal(); }
+        });
+    </script>
+
+</body>
+</html>
